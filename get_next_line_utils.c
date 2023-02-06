@@ -12,7 +12,21 @@
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+char	*ft_calloc(size_t nmemb)
+{
+	char	*dst;
+	size_t	n;
+
+	n = nmemb * sizeof(char);
+	dst = (char *) malloc(n);
+	if (!dst)
+		return (0);
+	while (--n)
+		dst[n] = '\0';
+	return (dst);
+}
+
+size_t	ft_strlen_nl(const char *str)
 {
 	size_t	i;
 
@@ -54,15 +68,13 @@ char	*ft_makestr(char *temp, char *to_read)
 	size_t len_read;
 	size_t total;
 	
-	len_temp = ft_strlen(temp);
-	len_read = ft_strlen(to_read);
-	total = len_temp + len_read;
-	//printf("total:%zu\n", total);	
+	len_temp = ft_strlen_nl(temp);
+	len_read = ft_strlen_nl(to_read);
+	total = len_temp + len_read;	
 	to_write = (char *) malloc((total + 1) * sizeof (char));
 	ft_strcopy(to_write, temp);
 	ft_strcopy((to_write + len_temp), to_read);
-	/*if (*temp)
-		free(temp);*/
+	if (*temp)
+		free(temp);
 	return(to_write);
-
 }

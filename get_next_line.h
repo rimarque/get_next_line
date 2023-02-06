@@ -18,13 +18,16 @@
 # include <stdio.h>
 # include <fcntl.h>
 
-/*# ifndef BUFFER_SIZE
-#	define BUFFER_SIZE 5
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE 99999
 
-# endif*/
+# endif
 
 char    *ft_makestr(char *temp, char *to_read);
-char    *get_next_line(int fd, size_t bs);
+char    *get_next_line(int fd);
+size_t	ft_strlen_nl(const char *str);
+void	ft_strcopy(char *dst, char *src);
+char	*ft_calloc(size_t nmemb);
 
 # endif
 
