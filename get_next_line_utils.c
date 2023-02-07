@@ -12,17 +12,15 @@
 
 #include "get_next_line.h"
 
-char	*ft_calloc(size_t nmemb)
+char	*ft_calloc(size_t n)
 {
 	char	*dst;
-	size_t	n;
 
-	n = nmemb * sizeof(char);
 	dst = (char *) malloc(n);
 	if (!dst)
 		return (0);
-	while (--n)
-		dst[n] = '\0';
+	while (n)
+		dst[--n] = '\0';
 	return (dst);
 }
 
@@ -71,7 +69,7 @@ char	*ft_makestr(char *temp, char *to_read)
 	len_temp = ft_strlen_nl(temp);
 	len_read = ft_strlen_nl(to_read);
 	total = len_temp + len_read;	
-	to_write = (char *) malloc((total + 1) * sizeof (char));
+	to_write = ft_calloc(total + 1);
 	ft_strcopy(to_write, temp);
 	ft_strcopy((to_write + len_temp), to_read);
 	if (*temp)
