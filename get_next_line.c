@@ -37,7 +37,7 @@ char *make_temp(char *temp, char *to_read)
 char *move_to_read(char *to_read, size_t len)
 {
 	
-	char *dst = ft_calloc((ft_strclen(to_read, '\0') + 1) - len);
+	char *dst = ft_calloc((ft_strclen(to_read, '\0') + 1 )- len);
 	ft_strccpy(dst, to_read + len, '\0');
 	free(to_read);
 	return(dst);
@@ -77,6 +77,7 @@ char *get_next_line(int fd)
 		free(to_read);
 		return (NULL);
 		}
+		if (bytes_read > 0)
 			//printf("\nto_read 3:%s", to_read);
 			temp = ft_strjoin(temp, to_read);
 			//printf("\ntemp 2:%s", temp);
