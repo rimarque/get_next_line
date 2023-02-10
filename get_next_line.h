@@ -19,14 +19,14 @@
 # include <fcntl.h>
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 10
 
 # endif
 
-char    *ft_makestr(char *temp, char *to_read);
+char    *ft_strjoin(char *temp, char *to_read);
 char    *get_next_line(int fd);
-size_t	ft_strlen_nl(const char *str);
-void	ft_strcopy(char *dst, char *src);
+size_t	ft_strclen(const char *str, char c);
+void	ft_strccpy(char *dst, char *src, char c);
 char	*ft_calloc(size_t nmemb);
 
 # endif

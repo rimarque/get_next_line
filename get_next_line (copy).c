@@ -12,84 +12,89 @@
 
 #include "get_next_line.h"
 
-int find_nl(char *str)
+int	find_nl(char *str)
 {
 	while (*str)
 	{
-		if (*str == '\n')
+		if(*str == '\n')
 			return (1);
 		str++;
 	}
 	return (0);
 }
-char *make_temp(char *temp, char *to_read)
+char	*make_temp(char *temp, char *to_read)
 {
-	size_t len_temp;
-
-	len_temp = ft_strclen(to_read, '\n');
-	temp = ft_calloc(len_temp + 1);
-	ft_strccpy(temp, to_read, '\n');
-	if (to_read[len_temp] == '\0')
-		free (to_read);
+	temp = ft_calloc(ft_strlen_nl(to_read) + 1);
+	ft_strcopy(temp, to_read);
+	free(to_read);
 	return (temp);
 }
 
-char *move_to_read(char *to_read, size_t len)
+/*char	*decisions(int fd, )
 {
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	if (!to_read)
+		*to_read = '\0';
+	else
+	{
+		temp = ft_calloc(ft_strlen_nl(to_read) + 1);
+		ft_strcopy(temp, to_read);
+		free(to_read);
+	}
+	return (temp);
 	
-	char *dst = ft_calloc((ft_strclen(to_read, '\0') + 1) - len);
-	ft_strccpy(dst, to_read + len, '\0');
-	free(to_read);
-	return(dst);
-}
-char *get_next_line(int fd)
-{
-	static char *to_read;
-	size_t len_writen;
-	char *temp;
-	int bytes_read;
+}*/
 
+char    *get_next_line(int fd)
+{
+	static char    *to_read;
+	size_t	len_read;
+    char    *temp;
+    int  bytes_read;
+	/*if(*to_read)
+		to_read = to_read + len_read;
+	decisions (fd, to_read, to_write);*/
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	temp = "\0";
-	//printf("\nto_read 1:%s", to_read);
-	//printf("\nto_read dec:%d", to_read[0]);
 	if (!to_read)
 		to_read = "\0";
-	if (*to_read)
+	else
 	{
-		len_writen = ft_strclen(to_read, '\n');
-		//printf("\nlen_written:%ld", len_writen);
-		to_read = move_to_read(to_read, len_writen);
-		//printf("\nto_read 2:%s", to_read);
-		temp = make_temp(temp, to_read);
-		//printf("\ntemp 1:%s", temp);
+		len_read = ft_strlen_nl(to_read);
+		to_read = to_read + len_read;
+		if(*to_read != '\0')
+			temp = make_temp(temp, to_read);
 	}
-	bytes_read = 1;
-	if (!find_nl(to_read))
-		to_read = ft_calloc(BUFFER_SIZE + 1);
+    bytes_read = 1;
 	while (bytes_read > 0 && !find_nl(to_read))
 	{
-		bytes_read = read(fd, to_read, BUFFER_SIZE);
-		if (bytes_read <= 0 && !*temp)
+		to_read = ft_calloc(BUFFER_SIZE + 1);
+        bytes_read = read(fd, to_read, BUFFER_SIZE);
+		if (bytes_read == -1)
 		{
-		//free(temp);
+			free(to_read);
+			return (NULL);
+		}
+        temp = ft_makestr(temp, to_read);
+    }
+	if (*to_read && bytes_read == 0)
+		free(to_read);
+	if (!*temp)
+	{
+		free(temp);
 		free(to_read);
 		return (NULL);
-		}
-			//printf("\nto_read 3:%s", to_read);
-			temp = ft_strjoin(temp, to_read);
-			//printf("\ntemp 2:%s", temp);
-			//printf("\nto_read 4:%s", to_read);
 	}
-	return (temp);
+    return (temp);
 }
 
 #include <fcntl.h>
-int main(void)
+int	main(void)
 {
-	int fd;
-	char *prt;
+	int		fd;
+	char	*prt;
 	fd = open("novo.txt", O_RDONLY);
 	prt = get_next_line(fd);
 	printf("\n1 Func Return:%s", prt);
@@ -109,7 +114,7 @@ int main(void)
 	prt = get_next_line(fd);
 	printf("\n6 Func Return:%s", prt);
 	free(prt);
-	/*prt = get_next_line(fd);
+	prt = get_next_line(fd);
 	printf("\n7 Func Return:%s", prt);
 	free(prt);
 	prt = get_next_line(fd);
@@ -120,6 +125,6 @@ int main(void)
 	free(prt);
 	prt = get_next_line(fd);
 	printf("\n10 Func Return:%s", prt);
-	free(prt);*/
+	free(prt);
 	close(fd);
 }
