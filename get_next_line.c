@@ -73,10 +73,11 @@ char *get_next_line(int fd)
 		bytes_read = read(fd, to_read, BUFFER_SIZE);
 		if (bytes_read <= 0 && !*temp)
 		{
-		//free(temp);
 		free(to_read);
 		return (NULL);
 		}
+		if (bytes_read == 0)
+			free(to_read);
 		if (bytes_read > 0)
 			//printf("\nto_read 3:%s", to_read);
 			temp = ft_strjoin(temp, to_read);
