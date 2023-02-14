@@ -68,16 +68,37 @@ char	*ft_strjoin(char *temp, char *to_read)
 	len_temp = ft_strclen(temp, '\n');
 	len_read = ft_strclen(to_read, '\n');
 	total = len_temp + len_read;
-	//printf("\nlen_temp:%ld", len_temp);
-	//printf("\nlen_read:%ld", len_read);
-	//printf("\ntotal:%ld", total);
 	to_write = ft_calloc(total + 1);
 	ft_strccpy(to_write, temp, '\n');
-	//printf("\nto_write 1:%s", to_write);
 	ft_strccpy((to_write + len_temp), to_read, '\n');
-	//printf("\nto_write 2:%s", to_write);
-	//free(to_read);
 	if (*temp)
 		free(temp);
 	return(to_write);
 }
+
+/*char	*read_file(char *temp, char *to_read)
+{
+	int	bytes;
+
+	bytes = 1;
+	while (bytes > 0 && !find_nl(temp))
+	{
+		if (bytes != 0)
+		{
+			free (to_read);
+			to_read = ft_calloc(BUFFER_SIZE + 1);
+		}
+		bytes = read(fd, to_read, BUFFER_SIZE);
+		if(bytes < 0 || (bytes == 0 && !*temp))
+		{
+			free(to_read);
+			to_read = NULL;
+			return (to_read);
+		}
+		if (bytes < 0 || (bytes == 0 && !*temp))
+			return (NULL);
+		if (bytes > 0)
+			temp = ft_strjoin(temp, to_read);
+	}
+	return (temp);
+}*/
