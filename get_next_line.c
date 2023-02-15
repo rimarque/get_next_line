@@ -35,37 +35,28 @@ char	*move_to_read(char *to_read)
 	return(dst);
 }
 
-char	*make_temp(char *temp, char *to_read)
+char	*make_temp(char *temp, char **to_read)
 {
 	size_t len;
 
-	len = ft_strclen(to_read, '\n');
+	len = ft_strclen(*to_read, '\n');
 	if (len > 0)
 	{
 		temp = ft_calloc(len + 1);
-		ft_strccpy(temp, to_read, '\n');
+		ft_strccpy(temp, *to_read, '\n');
+	}
+	if (to_read[0][len] == '\0')
+	{
+		free(*to_read);
+		*to_read = NULL;
 	}
 	return (temp);
-}
-
-char	*free_to_read(char *to_read)
-{
-	size_t len;
-
-	len = ft_strclen(to_read, '\n');
-	if (to_read[len] == '\0')
-	{
-		free(to_read);
-		to_read = NULL;
-	}
-	return (to_read);
 }
 
 char *get_next_line(int fd)
 {
 	static char *to_read;
 	char *temp;
-	int bytes;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -75,30 +66,12 @@ char *get_next_line(int fd)
 	if (*to_read)
 	{
 		to_read = move_to_read(to_read);
-		temp = make_temp(temp, to_read);
-		to_read = free_to_read(to_read);
+		temp = make_temp(temp, &to_read);
 	}
-	bytes = 1;
 	if (!find_nl(temp))
-		to_read = ft_calloc(BUFFER_SIZE + 1);
-	while (bytes > 0 && !find_nl(temp))
-	{
-		if (bytes != 0)
-		{
-			free(to_read);
-			to_read = ft_calloc(BUFFER_SIZE + 1);
-		}
-		bytes = read(fd, to_read, BUFFER_SIZE);
-		if(bytes <= 0)
-		{
-			free(to_read);
-			to_read = NULL;
-		}
-		if (bytes < 0 || (bytes == 0 && !*temp))
-			return (NULL);
-		if (bytes > 0)
-			temp = ft_strjoin(temp, to_read);
-	}
+		temp = read_fd(fd, &to_read, temp);
+	if (!temp)
+		return (NULL);
 	return (temp);
 }
 

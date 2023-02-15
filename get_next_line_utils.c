@@ -15,12 +15,12 @@
 char	*ft_calloc(size_t n)
 {
 	char	*dst;
-	
+
 	dst = (char *) malloc(n);
 	if (!dst)
 		return (0);
 	while (n)
-		dst[--n] = '\0';
+			dst[--n] = '\0';
 	return (dst);
 }
 
@@ -60,45 +60,43 @@ void	ft_strccpy(char *dst, char *src, char c)
 
 char	*ft_strjoin(char *temp, char *to_read)
 {
-	char	*to_write;
+	char	*dst;
 	size_t len_temp;
 	size_t len_read;
-	size_t total;
 	
 	len_temp = ft_strclen(temp, '\n');
 	len_read = ft_strclen(to_read, '\n');
-	total = len_temp + len_read;
-	to_write = ft_calloc(total + 1);
-	ft_strccpy(to_write, temp, '\n');
-	ft_strccpy((to_write + len_temp), to_read, '\n');
+	dst = ft_calloc(len_temp + len_read + 1);
+	ft_strccpy(dst, temp, '\n');
+	ft_strccpy((dst + len_temp), to_read, '\n');
 	if (*temp)
 		free(temp);
-	return(to_write);
+	return(dst);
 }
 
-/*char	*read_file(char *temp, char *to_read)
-{
-	int	bytes;
+char	*read_fd(int fd, char **to_read, char *temp)
+{	
+	int bytes;
 
 	bytes = 1;
+	*to_read = ft_calloc(BUFFER_SIZE + 1);
 	while (bytes > 0 && !find_nl(temp))
 	{
 		if (bytes != 0)
 		{
-			free (to_read);
-			to_read = ft_calloc(BUFFER_SIZE + 1);
+			free(*to_read);
+			*to_read = ft_calloc(BUFFER_SIZE + 1);
 		}
-		bytes = read(fd, to_read, BUFFER_SIZE);
-		if(bytes < 0 || (bytes == 0 && !*temp))
+		bytes = read(fd, *to_read, BUFFER_SIZE);
+		if(bytes <= 0)
 		{
-			free(to_read);
-			to_read = NULL;
-			return (to_read);
+			free(*to_read);
+			*to_read = NULL;
 		}
 		if (bytes < 0 || (bytes == 0 && !*temp))
 			return (NULL);
 		if (bytes > 0)
-			temp = ft_strjoin(temp, to_read);
+			temp = ft_strjoin(temp, *to_read);
 	}
 	return (temp);
-}*/
+}

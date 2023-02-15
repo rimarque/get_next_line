@@ -19,7 +19,7 @@
 # include <fcntl.h>
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
+# define BUFFER_SIZE 10
 
 # endif
 
@@ -28,6 +28,8 @@ char    *get_next_line(int fd);
 size_t	ft_strclen(const char *str, char c);
 void	ft_strccpy(char *dst, char *src, char c);
 char	*ft_calloc(size_t nmemb);
+char	*read_fd(int fd, char **to_read, char *temp);
+int     find_nl(char *str);
 
 # endif
 
