@@ -74,7 +74,7 @@ char	*ft_strjoin(char *line, char *to_read)
 	return (dst);
 }
 
-char	*read_fd(int fd, char **to_read, char *line)
+char	*ft_get_line(int fd, char **to_read, char *line)
 {	
 	int	bytes;
 

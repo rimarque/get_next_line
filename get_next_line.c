@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-int find_nl(char *str)
+int	find_nl(char *str)
 {
 	while (*str)
 	{
@@ -25,54 +25,54 @@ int find_nl(char *str)
 
 char	*move_to_read(char *to_read)
 {
-	size_t len;
-	char *dst;
+	size_t	prev_line;
+	char	*dst;
 
-	len = ft_strclen(to_read, '\n');
-	dst = ft_calloc((ft_strclen(to_read, '\0') + 1 ) - len);
-	ft_strccpy(dst, to_read + len, '\0');
+	prev_line = ft_strclen(to_read, '\n');
+	dst = ft_calloc((ft_strclen(to_read, '\0') + 1) - prev_line);
+	ft_strccpy(dst, to_read + prev_line, '\0');
 	free(to_read);
-	return(dst);
+	return (dst);
 }
 
-char	*make_temp(char *temp, char **to_read)
+char	*cpy_to_line(char *line, char **to_read)
 {
-	size_t len;
+	size_t	len;
 
 	len = ft_strclen(*to_read, '\n');
 	if (len > 0)
 	{
-		temp = ft_calloc(len + 1);
-		ft_strccpy(temp, *to_read, '\n');
+		line = ft_calloc(len + 1);
+		ft_strccpy(line, *to_read, '\n');
 	}
 	if (to_read[0][len] == '\0')
 	{
 		free(*to_read);
 		*to_read = NULL;
 	}
-	return (temp);
+	return (line);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static char *to_read;
-	char *temp;
+	static char	*to_read;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	temp = "\0";
+	line = "\0";
 	if (!to_read)
 		to_read = "\0";
 	if (*to_read)
 	{
 		to_read = move_to_read(to_read);
-		temp = make_temp(temp, &to_read);
+		line = cpy_to_line(line, &to_read);
 	}
-	if (!find_nl(temp))
-		temp = read_fd(fd, &to_read, temp);
-	if (!temp)
+	if (!find_nl(line))
+		line = read_fd(fd, &to_read, line);
+	if (!line)
 		return (NULL);
-	return (temp);
+	return (line);
 }
 
 /*#include <fcntl.h>
@@ -80,7 +80,7 @@ int main(void)
 {
 	int fd;
 	char *prt;
-	fd = open("read_error.txt", O_RDONLY);
+	fd = open("1char.txt", O_RDONLY);
 	prt = get_next_line(fd);
 	printf("\n1 Func Return:%s", prt);
 	free(prt);
