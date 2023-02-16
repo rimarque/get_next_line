@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimarque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/26 21:54:29 by rimarque          #+#    #+#             */
-/*   Updated: 2023/01/29 19:56:39 by rimarque         ###   ########.fr       */
+/*   Created: 2023/02/16 16:43:10 by rimarque          #+#    #+#             */
+/*   Updated: 2023/02/16 16:43:16 by rimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	find_nl(char *str)
 {
@@ -53,75 +53,47 @@ char	*cpy_to_line(char *line, char **to_read)
 	return (line);
 }
 
+char	*read_to_line(int fd, char **to_read, char *line)
+{	
+	int	bytes;
+
+	bytes = 1;
+	*to_read = ft_calloc(BUFFER_SIZE + 1);
+	while (bytes > 0 && !find_nl(line))
+	{
+		if (bytes != 0)
+		{
+			free(*to_read);
+			*to_read = ft_calloc(BUFFER_SIZE + 1);
+		}
+		bytes = read(fd, *to_read, BUFFER_SIZE);
+		*to_read = free_str(bytes, *to_read, line);
+		if (bytes < 0 || (bytes == 0 && !*line))
+			return (NULL);
+		if (bytes > 0)
+			line = ft_strjoin(line, *to_read);
+	}
+	return (line);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*to_read[OPEN_MAX];
+	static char	*to_read[HARD_LIMIT];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > (HARD_LIMIT + 3) || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = "\0";
 	if (!to_read[fd])
-		to_read = "\0";
+		to_read[fd] = "\0";
 	if (*to_read[fd])
 	{
 		to_read[fd] = move_to_read(to_read[fd]);
 		line = cpy_to_line(line, &to_read[fd]);
 	}
 	if (!find_nl(line))
-		line = ft_get_line(fd, &to_read[fd], line);
+		line = read_to_line(fd, &to_read[fd], line);
 	if (!line)
 		return (NULL);
 	return (line);
-}
-
-#include <fcntl.h>
-int main(void)
-{
-	int fd_1;
-	int fd_2;
-	int fd_3;
-	char *prt;
-
-	fd_1 = open("multiple_nlx5", O_RDONLY);
-	fd_2 = open("43_no_nl", O_RDONLY);
-	fd_3 = open("alternate_line_nl_with_nl", O_RDONLY);
-	printf("fd_1:%d\nfd_2:%d\nfd_3%d\n", fd_1, fd_2, fd_3);
-	prt = get_next_line(fd_1);
-	printf("\n1 Func Return:%s", prt);
-	free(ptr);
-	prt = get_next_line(fd_2);
-	printf("\n1 Func Return:%s", prt);
-	free (ptr);
-	prt = get_next_line(fd_3);
-	printf("\n1 Func Return:%s", prt);
-	free(prt);
-	/*prt = get_next_line(fd);
-	printf("\n2 Func Return:%s", prt);
-	free(prt);
-	prt = get_next_line(fd);
-	printf("\n3 Func Return:%s", prt);
-	free(prt);
-	prt = get_next_line(fd);
-	printf("\n4 Func Return:%s", prt);
-	free(prt);
-	prt = get_next_line(fd);
-	printf("\n5 Func Return:%s", prt);
-	free(prt);
-	prt = get_next_line(fd);
-	printf("\n6 Func Return:%s", prt);
-	free(prt);
-	prt = get_next_line(fd);
-	printf("\n7 Func Return:%s", prt);
-	free(prt);
-	prt = get_next_line(fd);
-	printf("\n8 Func Return:%s", prt);
-	free(prt);
-	prt = get_next_line(fd);
-	printf("\n9 Func Return:%s", prt);
-	free(prt);
-	prt = get_next_line(fd);
-	printf("\n10 Func Return:%s", prt);
-	free(prt);*/
-	close(fd);
 }

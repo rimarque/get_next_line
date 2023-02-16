@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimarque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/27 17:17:42 by rimarque          #+#    #+#             */
-/*   Updated: 2023/01/29 19:58:25 by rimarque         ###   ########.fr       */
+/*   Created: 2023/02/16 16:43:46 by rimarque          #+#    #+#             */
+/*   Updated: 2023/02/16 16:43:50 by rimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_calloc(size_t n)
 {
@@ -74,29 +74,17 @@ char	*ft_strjoin(char *line, char *to_read)
 	return (dst);
 }
 
-char	*ft_get_line(int fd, char **to_read, char *line)
-{	
-	int	bytes;
-
-	bytes = 1;
-	*to_read = ft_calloc(BUFFER_SIZE + 1);
-	while (bytes > 0 && !find_nl(line))
+char	*free_str(int bytes, char *to_read, char *line)
+{
+	if (bytes <= 0)
 	{
-		if (bytes != 0)
-		{
-			free(*to_read);
-			*to_read = ft_calloc(BUFFER_SIZE + 1);
-		}
-		bytes = read(fd, *to_read, BUFFER_SIZE);
-		if (bytes <= 0)
-		{
-			free(*to_read);
-			*to_read = NULL;
-		}
-		if (bytes < 0 || (bytes == 0 && !*line))
-			return (NULL);
-		if (bytes > 0)
-			line = ft_strjoin(line, *to_read);
+		free(to_read);
+		to_read = NULL;
 	}
-	return (line);
+	if (bytes < 0)
+	{
+		if (*line)
+			free(line);
+	}
+	return (to_read);
 }

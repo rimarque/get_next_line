@@ -24,7 +24,7 @@
 # endif
 
 char	*get_next_line(int fd);
-char	*read_fd(int fd, char **to_read, char *temp);
+char	*free_str(int bytes, char *to_read, char *line);
 char	*ft_strjoin(char *temp, char *to_read);
 void	ft_strccpy(char *dst, char *src, char c);
 size_t	ft_strclen(const char *str, char c);

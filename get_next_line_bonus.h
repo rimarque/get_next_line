@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rimarque <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/26 15:49:10 by rimarque          #+#    #+#             */
-/*   Updated: 2023/01/29 19:01:22 by rimarque         ###   ########.fr       */
+/*   Created: 2023/02/16 16:43:29 by rimarque          #+#    #+#             */
+/*   Updated: 2023/02/16 16:43:35 by rimarque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -20,11 +20,13 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
-
+# endif
+# ifndef HARD_LIMIT
+#  define HARD_LIMIT 4096
 # endif
 
 char	*get_next_line(int fd);
-char	*read_fd(int fd, char **to_read, char *temp);
+char	*free_str(int bytes, char *to_read, char *line);
 char	*ft_strjoin(char *temp, char *to_read);
 void	ft_strccpy(char *dst, char *src, char c);
 size_t	ft_strclen(const char *str, char c);
