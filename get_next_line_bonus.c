@@ -58,7 +58,6 @@ char	*read_to_line(int fd, char **to_read, char *line)
 	int	bytes;
 
 	bytes = 1;
-	*to_read = ft_calloc(BUFFER_SIZE + 1);
 	while (bytes > 0 && !find_nl(line))
 	{
 		if (bytes != 0)
@@ -67,7 +66,13 @@ char	*read_to_line(int fd, char **to_read, char *line)
 			*to_read = ft_calloc(BUFFER_SIZE + 1);
 		}
 		bytes = read(fd, *to_read, BUFFER_SIZE);
-		*to_read = free_str(bytes, *to_read, line);
+		if (bytes <= 0)
+		{
+			free(*to_read);
+			*to_read = NULL;
+		}
+		if (bytes < 0 && *line)
+			free(line);
 		if (bytes < 0 || (bytes == 0 && !*line))
 			return (NULL);
 		if (bytes > 0)
@@ -85,7 +90,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = "\0";
 	if (!to_read[fd])
-		to_read[fd] = "\0";
+		to_read[fd] = ft_calloc(BUFFER_SIZE + 1);
 	if (*to_read[fd])
 	{
 		to_read[fd] = move_to_read(to_read[fd]);

@@ -73,18 +73,3 @@ char	*ft_strjoin(char *line, char *to_read)
 		free(line);
 	return (dst);
 }
-
-char	*free_str(int bytes, char *to_read, char *line)
-{
-	if (bytes <= 0)
-	{
-		free(to_read);
-		to_read = NULL;
-	}
-	if (bytes < 0)
-	{
-		if (*line)
-			free(line);
-	}
-	return (to_read);
-}
