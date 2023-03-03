@@ -21,8 +21,8 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-# ifndef HARD_LIMIT
-#  define HARD_LIMIT 4096
+# ifndef SOFT_LIMIT
+#  define SOFT_LIMIT 1024
 # endif
 
 char	*get_next_line(int fd);

@@ -83,10 +83,10 @@ char	*read_to_line(int fd, char **to_read, char *line)
 
 char	*get_next_line(int fd)
 {
-	static char	*to_read[HARD_LIMIT];
+	static char	*to_read[SOFT_LIMIT + 2];
 	char		*line;
 
-	if (fd < 0 || fd > (HARD_LIMIT + 3) || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > (SOFT_LIMIT + 2) || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = "\0";
 	if (!to_read[fd])
