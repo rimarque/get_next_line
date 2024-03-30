@@ -1,7 +1,7 @@
 # **Get_next_line**
 
 ## :speech_balloon: **About**
-Get_next is a function that that returns a line read from a file descriptor:
+get_next_line is a function that that returns a line read from a file descriptor:
 repeated calls to the get_next_line() function let you read the text file pointed to by the file descriptor, one line at a time.
 
 ## 🙋‍♀️ **Authorship**
